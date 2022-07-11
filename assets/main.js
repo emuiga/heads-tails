@@ -1,60 +1,101 @@
-let myPick = null;
-let computerPick = null;
-let round = null;
-let person = null;
-let computer = null;
+const button5 = document.querySelector("#plusFive")
+const button10 = document.querySelector("#plusTen");
+const button15 = document.querySelector("#plusFifteen");
+const button20 = document.querySelector("#plusTwenty");
+const indicator = document.querySelector("#number-indicator")
+const disp = document.querySelector("#display-heading")
 
-let flipBtn = document.querySelector("#head-tail");
+button5.addEventListener('click', () => {
+  disp.textContent = "added 5"
+  indicator.textContent = (parseInt(indicator.textContent) + 5).toString()
+})
+button10.addEventListener('click', () => {
+  disp.textContent = "added 10"
+  indicator.textContent = (parseInt(indicator.textContent) + 10).toString()
+})
+button15.addEventListener('click', () => {
+  disp.textContent = "added 15"
+  indicator.textContent = (parseInt(indicator.textContent) + 15).toString()
+})
+button20.addEventListener('click', () => {
+  disp.textContent = "added 20"
+  indicator.textContent = (parseInt(indicator.textContent) + 20).toString()
+})
 
-flipBtn.addEventListener("click", () => {
-  round++;
-  document.getElementById("round").innerHTML = ` - Round: ${round}`;
+const uHeads = document.querySelector('#heads')
+const uTails = document.querySelector('#tails')
+const reset = document.querySelector('#reset')
 
-  computerChoice();
-  myChoice();
+let winnner = ''
+let chosen = 0
+let compChosen = 0
+let outcome = 0
+let table = document.querySelector('table')
+let totalrows = document.querySelectorAll('table tr').length;
+let yourScore = 0
+let compScore = 0
 
-  if (round == 1) {
-    computerPick === "tails" && myPick === 'heads' ? person += 1 : computer += 0;
-  } else if (round == 2) {
-    computerPick === "tails" && myPick === 'heads' ? person += 2 : computer += 0;
-  } else if (round == 3) {
-    computerPick === "heads" && myPick === 'heads' ? person += 3 : computer += 1;
-  } else if (round == 4) {
-    computerPick === "tails" && myPick === 'tails' ? person += 3 : computer += 2;
-  } else if (round == 5) {
-    computerPick === "tails" && myPick === 'heads' ? person += 4 : computer += 2;
-    disableBtn();
-    person >= computer ? alert('You win!') : alert('You lose!');
+uHeads.addEventListener('click', () => {
+  chosen = 1
+  evaluate()
+  let row = table.insertRow(totalrows)
+  let cell1 = row.insertCell(0)
+  let cell2 = row.insertCell(1)
+  let cell3 = row.insertCell(2)
+  let cell4 = row.insertCell(3)
+  let cell5 = row.insertCell(4)
+  cell1.textContent= 'Head'
+  cell2.textContent=compChosen ===1?'Head':'Tails'
+  cell3.textContent = outcome === 1 ? "Head" : "Tails";
+  cell4.textContent=yourScore
+  cell5.textContent=compScore
+  
+
+  
+})
+uTails.addEventListener('click', () => {
+  chosen = 2
+  evaluate()
+  let row = table.insertRow(totalrows);
+	let cell1 = row.insertCell(0);
+	let cell2 = row.insertCell(1);
+	let cell3 = row.insertCell(2);
+	let cell4 = row.insertCell(3);
+	let cell5 = row.insertCell(4);
+	cell1.textContent = "Tails";
+	cell2.textContent = compChosen === 1 ? "Head" : "Tails";
+	cell3.textContent = outcome === 1 ? "Head" : "Tails";
+	cell4.textContent = yourScore;
+	cell5.textContent = compScore;
+
+	
+})
+
+const evaluate = () => {
+  	compChosen = Math.floor(Math.random() * 2) + 1;
+  outcome = Math.floor(Math.random() * 2) + 1;
+  if ((table.rows.length === 5)) {
+     calculate()
   }
+		if (chosen == outcome && compChosen !== outcome) {
+      console.log("You win");
+      yourScore++
+		} else if (chosen !== outcome && compChosen === outcome) {
+      console.log("Comp wins");
+      compScore++
+		} else if (chosen === outcome && compChosen === outcome) {
+			console.log("You tie");
+    }
+}
 
-  console.log(`person: ${person}`); console.log(`computer: ${computer}`);
-});
+const calculate = () => {
+  yourScore > compScore ? alert('you won') : compScore > yourScore ? alert('comp won') : alert('you tie')
+  location.reload()
+}
 
-const computerChoice = () => {
-  let coins = ["tails", "heads"];
-  let random = Math.round(Math.random() % 2);
-  computerPick = coins[random];
-
-  console.log(`Computer Choice: ${computerPick}`);
-};
-
-const myChoice = () => {
-  document.getElementById("heads").checked == true ? (myPick = "heads") : (myPick = "tails");
-  console.log(`My Pick: ${myPick}`);
-};
-
-const disableBtn = () => {
-  flipBtn.setAttribute("disabled", "disabled");
-};
-
-const resetBtn = document.getElementById("reset");
-
-reset.addEventListener("click", () => {
-  myPick = null;
-  computerPick = null;
-  round = null;
-  computer = null;
-  person = null;
-  flipBtn.removeAttribute("disabled");
-  document.getElementById("round").innerHTML = "";
-});
+const reload = () => {
+  reset.addEventListener('click', () => {
+    location.reload()
+  })
+}
+reload()
